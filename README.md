@@ -8,7 +8,7 @@ $ docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -p 5432:
 
 -----------------------------------------
 Swagger link:
-[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/v3/api-docs)
+http://localhost:8080/v3/api-docs
 
 -----------------------------------------
 Docker command for create kafka image:
