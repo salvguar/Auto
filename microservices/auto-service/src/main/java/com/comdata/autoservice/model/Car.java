@@ -14,7 +14,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Builder;
 
-@Builder
 @Entity
 @Table(name="cars")
 public class Car {

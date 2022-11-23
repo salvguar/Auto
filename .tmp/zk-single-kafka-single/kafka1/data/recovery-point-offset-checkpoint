@@ -1,6 +1,6 @@
 0
 55
-__consumer_offsets 22 13
+__consumer_offsets 22 128
 __consumer_offsets 30 0
 __consumer_offsets 8 0
 __consumer_offsets 21 0
@@ -9,8 +9,8 @@ __consumer_offsets 27 0
 __consumer_offsets 7 0
 __consumer_offsets 9 0
 __consumer_offsets 46 0
-POST 0 0
-DELETE 0 0
+POST 0 6
+DELETE 0 5
 __consumer_offsets 25 0
 __consumer_offsets 35 0
 __consumer_offsets 41 0
@@ -29,7 +29,7 @@ __consumer_offsets 37 0
 __consumer_offsets 15 0
 __consumer_offsets 24 0
 __consumer_offsets 38 0
-auto-worker 0 6
+auto-worker 0 34
 __consumer_offsets 17 0
 __consumer_offsets 48 0
 __confluent.support.metrics 0 0
@@ -50,7 +50,7 @@ __consumer_offsets 1 0
 __consumer_offsets 5 0
 __consumer_offsets 26 0
 __consumer_offsets 29 0
-PUT 0 0
+PUT 0 2
 __consumer_offsets 34 0
 __consumer_offsets 10 0
 __consumer_offsets 32 0

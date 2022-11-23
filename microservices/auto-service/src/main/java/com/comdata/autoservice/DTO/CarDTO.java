@@ -10,8 +10,6 @@ import javax.validation.constraints.Size;
 
 import lombok.Builder;
 
-@Entity
-@Builder
 public class CarDTO {
 	
 	@Id
