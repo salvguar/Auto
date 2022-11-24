@@ -1,5 +1,7 @@
 package com.comdata.autoworker.service;
 
+import java.util.Map;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.comdata.autoservice.DTO.CarDTO;
 import com.comdata.autoservice.model.Car;
 import com.comdata.autoservice.repository.CarRepository;
+import com.google.gson.Gson;
 
 @Service
 public class CarWorkerServiceImpl implements CarWorkerService{
@@ -21,22 +24,21 @@ public class CarWorkerServiceImpl implements CarWorkerService{
 		this.modelMapper = modelMapper;
 	}
 	
-	@KafkaListener(topics = "POST", groupId = "my_group_id")
-	public void add(CarDTO car) {
-		logger.info("Add " + car.toString());
-		add(dtoToCar(car));
-	}
-	
-	@KafkaListener(topics = "PUT", groupId = "my_group_id")
-	public void edit(CarDTO car) {
-		logger.info("Edit " + car.toString());
-		edit(dtoToCar(car));
-	}
-	
-	@KafkaListener(topics = "DELETE", groupId = "my_group_id")
-	public void delete(CarDTO car) {
-		logger.info("Delete " + car.toString());
-		delete(dtoToCar(car));
+	@KafkaListener(topics = "my_topic", groupId = "my_group_id")
+	public void getCar(Map<String, String> message) {
+		Gson gson = new Gson();
+		Car car = gson.fromJson(message.get("entity"), Car.class);
+		
+		switch (message.get("OperationType")) {
+		case "CREATE": add(car);
+			break;
+		case "UPDATE": edit(car);
+			break;
+		case "DELETE": delete(car);
+			break;
+		default:
+			break;
+		}
 	}
 		
 	@Override

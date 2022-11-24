@@ -1,5 +1,7 @@
 package com.comdata.autoapi.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,22 +15,22 @@ import org.springframework.stereotype.Service;
 import com.comdata.autoservice.DTO.CarDTO;
 import com.comdata.autoservice.model.Car;
 import com.comdata.autoservice.repository.CarRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class CarApiServiceImpl implements CarApiService{
 	
 	private CarRepository repository;
 	private Logger logger = LoggerFactory.getLogger(CarApiServiceImpl.class);
-
-	private static final String POST = "POST";
-	private static final String PUT = "PUT";
-	private static final String DELETE = "DELETE";
-	@Autowired
-	private KafkaTemplate<String, CarDTO> kafkatemplate;
 	
+	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+	private static final String TOPIC = "my_topic";	
+	private KafkaTemplate<String, Map> kafkaMap;
 	
-	public CarApiServiceImpl(CarRepository repository) {
+	public CarApiServiceImpl(CarRepository repository, KafkaTemplate<String, Map> kafkaMap) {
 		this.repository = repository;
+		this.kafkaMap = kafkaMap;
 	}
 	
 	public Page<Car> getPage(int page, int items){
@@ -53,10 +55,14 @@ public class CarApiServiceImpl implements CarApiService{
 
 
 	@Override
-	public boolean add(CarDTO car) {
+	public boolean add(CarDTO car){
 		try {
 			logger.info("ADD CAR WITH POST-MAPPING");
-			this.kafkatemplate.send(POST, car);
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("OperationType", "CREATE");
+			String carJson = OBJECT_MAPPER.writeValueAsString(car);
+			headers.put("entity", carJson);
+			this.kafkaMap.send(TOPIC, headers);
 			return true;
 		}catch (Exception e) {
 			logger.error("Incorrect validation!");
@@ -69,7 +75,11 @@ public class CarApiServiceImpl implements CarApiService{
 	public boolean edit(CarDTO car) {
 		try {
 			logger.info("EDIT CAR WITH PUT-MAPPING");
-			this.kafkatemplate.send(PUT, car);
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("OperationType", "UPDATE");
+			String carJson = OBJECT_MAPPER.writeValueAsString(car);
+			headers.put("entity", carJson);
+			this.kafkaMap.send(TOPIC, headers);
 			return true;
 		}catch (Exception e) {
 			logger.error("Incorrect validation!");
@@ -82,7 +92,11 @@ public class CarApiServiceImpl implements CarApiService{
 	public boolean delete(CarDTO car) {
 		try {
 			logger.info("DELETE CAR");
-			this.kafkatemplate.send(DELETE, car);
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("OperationType", "DELETE");
+			String carJson = OBJECT_MAPPER.writeValueAsString(car);
+			headers.put("entity", carJson);
+			this.kafkaMap.send(TOPIC, headers);
 			return true;
 		}catch (Exception e) {
 			logger.error("Incorrect validation!");
