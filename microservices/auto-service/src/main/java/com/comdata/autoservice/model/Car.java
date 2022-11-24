@@ -12,8 +12,6 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import lombok.Builder;
-
 @Entity
 @Table(name="cars")
 public class Car {
