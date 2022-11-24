@@ -1,0 +1,39 @@
+server:
+    port: 8081    
+spring:
+    datasource:
+        driverClassName: org.postgresql.Driver
+        password: mysecretpassword
+        url: jdbc:postgresql://localhost:5432/postgres
+        username: postgres
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        hibernate:
+            ddl-auto: none
+    kafka:
+        producer:
+              bootstarp-servers: locahost:9092
+              key-deserializer: org.apache.kafka.common.serialization.StringSerializer
+              value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+        consumer:
+              bootstarp-servers: localhost:9092
+              group-id: "my_group_id"
+              auto-offset-reset: earliest
+              key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+              value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+              properties:
+                spring:
+                    json:
+                        trusted:
+                            packages: '*'
+logging:
+  level:
+    org:
+      springframework: ERROR
+    com:
+      mkyong: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+
+
+    
